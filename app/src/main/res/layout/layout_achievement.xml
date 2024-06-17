@@ -43,8 +43,7 @@
             android:layout_gravity="end"
             android:layout_marginVertical="8dp"
             android:layout_marginEnd="12dp"
-            android:importantForAccessibility="no"
-            tools:srcCompat="@drawable/ic_gold" />
+            android:importantForAccessibility="no" />
 
     </FrameLayout>
 

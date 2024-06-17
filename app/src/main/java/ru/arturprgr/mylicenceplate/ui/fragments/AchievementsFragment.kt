@@ -135,53 +135,19 @@ class AchievementsFragment : Fragment() {
         Database("${preferences.getAccount()}/achievements/$string").getValue { value ->
             try {
                 val quantity = value.toInt()
+                var drawable = 0
                 position += 1
-                Log.d("Attempt", position.toString())
-                if (quantity >= 0 || quantity <= 4) adapter.addAchievement(
+                if (quantity <= 4) drawable = R.drawable.ic_bronze
+                if (quantity >= 5) drawable = R.drawable.ic_silver
+                if (quantity >= 10) drawable = R.drawable.ic_gold
+                if (quantity >= 25) drawable = R.drawable.ic_platinum
+                if (quantity >= 50) drawable = R.drawable.ic_titanium
+                if (quantity >= 100) drawable = R.drawable.ic_achievements
+                adapter.addAchievement(
                     Achievement(
                         achievement,
                         quantity,
-                        R.drawable.ic_bronze,
-                        position
-                    )
-                )
-                else if (quantity >= 5 || quantity <= 9) adapter.addAchievement(
-                    Achievement(
-                        achievement,
-                        quantity,
-                        R.drawable.ic_silver,
-                        position
-                    )
-                )
-                else if (quantity >= 10 || quantity <= 24) adapter.addAchievement(
-                    Achievement(
-                        achievement,
-                        quantity,
-                        R.drawable.ic_gold,
-                        position
-                    )
-                )
-                else if (quantity >= 25 || quantity <= 49) adapter.addAchievement(
-                    Achievement(
-                        achievement,
-                        quantity,
-                        R.drawable.ic_platinum,
-                        position
-                    )
-                )
-                else if (quantity >= 50) adapter.addAchievement(
-                    Achievement(
-                        achievement,
-                        quantity,
-                        R.drawable.ic_titanium,
-                        position
-                    )
-                )
-                else if (quantity >= 100) adapter.addAchievement(
-                    Achievement(
-                        achievement,
-                        quantity,
-                        R.drawable.ic_achievements,
+                        drawable,
                         position
                     )
                 )
