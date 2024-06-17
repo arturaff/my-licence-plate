@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Мой номерной знак</string>
+    <string name="auth">Авторизация</string>
+    <string name="sign_in">Войдите в свой аккаунт</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="entrance">Вход</string>
+    <string name="no_account">Нет аккаунта</string>
+    <string name="reg">Регистрация</string>
+    <string name="regis">Зарегистрируйтесь</string>
+    <string name="name">Имя</string>
+    <string name="password_povtorni">Пароль (повторно)</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="yes_account">Есть аккаунт</string>
+    <string name="achievements">Достижения</string>
+    <string name="random">Рандом</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all">Всего достижений: 92 шт.</string>
+</resources>
