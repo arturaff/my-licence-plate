@@ -3,12 +3,12 @@ package ru.arturprgr.mylicenceplate.ui.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ru.arturprgr.mylicenceplate.data.Database
+import ru.arturprgr.mylicenceplate.data.FirebaseHelper
 import ru.arturprgr.mylicenceplate.data.Preferences
 import ru.arturprgr.mylicenceplate.databinding.FragmentRandomBinding
 import ru.arturprgr.mylicenceplate.viewToast
@@ -16,12 +16,14 @@ import java.util.Random
 
 class RandomFragment : Fragment() {
     private lateinit var binding: FragmentRandomBinding
+    private lateinit var preferences: Preferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentRandomBinding.inflate(inflater, container, false)
+        preferences = Preferences(requireContext())
         randomizeLicencePlate()
 
         binding.apply {
@@ -33,104 +35,92 @@ class RandomFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun randomizeLicencePlate() = with(binding) {
-        @Suppress("DEPRECATION") val handler = @SuppressLint("HandlerLeak")
-        object : Handler() {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-                textLetter.text = msg.data.getString("letter")
-                textNumbers.text = msg.data.getString("numbers")
-                textLetters.text = msg.data.getString("letters")
-                textRegion.text = msg.data.getString("region")
-                when (val numbers = "${textNumbers.text}") {
-                    "${numbers[0]}${numbers[0]}${numbers[0]}" -> updateAchievement(numbers)
-                    "00${numbers[2]}" -> updateAchievement(numbers)
-                    "${numbers[0]}00" -> updateAchievement(numbers)
-                }
-                when (val letters = "${textLetter.text}${textLetters.text}") {
-                    "ААА" -> updateAchievement(letters)
-                    "ВВВ" -> updateAchievement(letters)
-                    "ССС" -> updateAchievement(letters)
-                    "ЕЕЕ" -> updateAchievement(letters)
-                    "ННН" -> updateAchievement(letters)
-                    "ККК" -> updateAchievement(letters)
-                    "МММ" -> updateAchievement(letters)
-                    "ООО" -> updateAchievement(letters)
-                    "РРР" -> updateAchievement(letters)
-                    "ТТТ" -> updateAchievement(letters)
-                    "УУУ" -> updateAchievement(letters)
-                    "ХХХ" -> updateAchievement(letters)
-                    "ЕКХ" -> updateAchievement(letters)
-                    "ХКХ" -> updateAchievement(letters)
-                    "САС" -> updateAchievement(letters)
-                    "АОО" -> updateAchievement(letters)
-                    "ВОО" -> updateAchievement(letters)
-                    "СОО" -> updateAchievement(letters)
-                    "ЕОО" -> updateAchievement(letters)
-                    "НОО" -> updateAchievement(letters)
-                    "КОО" -> updateAchievement(letters)
-                    "МОО" -> updateAchievement(letters)
-                    "РОО" -> updateAchievement(letters)
-                    "ТОО" -> updateAchievement(letters)
-                    "УОО" -> updateAchievement(letters)
-                    "ХОО" -> updateAchievement(letters)
-                    "АМР" -> updateAchievement(letters)
-                    "АКР" -> updateAchievement(letters)
-                    "ВКР" -> updateAchievement(letters)
-                    "ЕКР" -> updateAchievement(letters)
-                    "ККР" -> updateAchievement(letters)
-                    "ЕРЕ" -> updateAchievement(letters)
-                    "АММ" -> updateAchievement(letters)
-                    "ВММ" -> updateAchievement(letters)
-                    "СММ" -> updateAchievement(letters)
-                    "ЕММ" -> updateAchievement(letters)
-                    "НММ" -> updateAchievement(letters)
-                    "КММ" -> updateAchievement(letters)
-                    "ОММ" -> updateAchievement(letters)
-                    "РММ" -> updateAchievement(letters)
-                    "ТММ" -> updateAchievement(letters)
-                    "УММ" -> updateAchievement(letters)
-                    "ХММ" -> updateAchievement(letters)
-                    "КМР" -> updateAchievement(letters)
-                    "РМР" -> updateAchievement(letters)
-                    "ММР" -> updateAchievement(letters)
-                    "ТМР" -> updateAchievement(letters)
-                    "НАА" -> updateAchievement(letters)
-                    "ТАА" -> updateAchievement(letters)
-                    "САА" -> updateAchievement(letters)
-                    "ХАА" -> updateAchievement(letters)
-                    "СКО" -> updateAchievement(letters)
-                    "АСК" -> updateAchievement(letters)
-                    "АНО" -> updateAchievement(letters)
-                    "МОР" -> updateAchievement(letters)
-                    "НСО" -> updateAchievement(letters)
-                    "МРО" -> updateAchievement(letters)
-                    "ООМ" -> updateAchievement(letters)
-                    "МВУ" -> updateAchievement(letters)
-                    "УВУ" -> updateAchievement(letters)
-                    "УВО" -> updateAchievement(letters)
-                    "ВМР" -> updateAchievement(letters)
-                    "ККХ" -> updateAchievement(letters)
-                    "ОМР" -> updateAchievement(letters)
-                    "УМР" -> updateAchievement(letters)
-                    "АУЕ" -> updateAchievement(letters)
-                }
-            }
-        }
-        Thread {
-            val bundle = Bundle()
-            val msg = handler.obtainMessage()
-            bundle.putString("letter", randomizeLetter())
-            bundle.putString("letters", "${randomizeLetter()}${randomizeLetter()}")
+        Handler(Looper.getMainLooper()).postDelayed({
             val numbers = "${randomizeNumber()}${randomizeNumber()}${randomizeNumber()}"
-            if (numbers == "000") bundle.putString("numbers", "001")
-            else bundle.putString("numbers", numbers)
+            textNumbers.text = if (numbers == "000") "001"
+            else numbers
             val region = "${randomizeNumber()}${randomizeNumber()}${randomizeNumber()}"
-            if (region[0] == '0') bundle.putString("region", "${region[1]}${region[2]}")
-            else bundle.putString("region", region)
-            msg.data = bundle
-            handler.sendMessage(msg)
-        }.start()
+            textRegion.text = if (region[0] == '0') "${region[1]}${region[2]}"
+            else region
+            textLetter.text = randomizeLetter()
+            textLetters.text = "${randomizeLetter()}${randomizeLetter()}"
+
+            when (val textNumbers = "${textNumbers.text}") {
+                "${textNumbers[0]}${textNumbers[0]}${textNumbers[0]}" -> updateAchievement(textNumbers)
+                "00${textNumbers[2]}" -> updateAchievement(textNumbers)
+                "${textNumbers[0]}00" -> updateAchievement(textNumbers)
+            }
+            when (val textLetters = "${textLetter.text}${textLetters.text}") {
+                "ААА" -> updateAchievement(textLetters)
+                "ВВВ" -> updateAchievement(textLetters)
+                "ССС" -> updateAchievement(textLetters)
+                "ЕЕЕ" -> updateAchievement(textLetters)
+                "ННН" -> updateAchievement(textLetters)
+                "ККК" -> updateAchievement(textLetters)
+                "МММ" -> updateAchievement(textLetters)
+                "ООО" -> updateAchievement(textLetters)
+                "РРР" -> updateAchievement(textLetters)
+                "ТТТ" -> updateAchievement(textLetters)
+                "УУУ" -> updateAchievement(textLetters)
+                "ХХХ" -> updateAchievement(textLetters)
+                "ЕКХ" -> updateAchievement(textLetters)
+                "ХКХ" -> updateAchievement(textLetters)
+                "САС" -> updateAchievement(textLetters)
+                "АОО" -> updateAchievement(textLetters)
+                "ВОО" -> updateAchievement(textLetters)
+                "СОО" -> updateAchievement(textLetters)
+                "ЕОО" -> updateAchievement(textLetters)
+                "НОО" -> updateAchievement(textLetters)
+                "КОО" -> updateAchievement(textLetters)
+                "МОО" -> updateAchievement(textLetters)
+                "РОО" -> updateAchievement(textLetters)
+                "ТОО" -> updateAchievement(textLetters)
+                "УОО" -> updateAchievement(textLetters)
+                "ХОО" -> updateAchievement(textLetters)
+                "АМР" -> updateAchievement(textLetters)
+                "АКР" -> updateAchievement(textLetters)
+                "ВКР" -> updateAchievement(textLetters)
+                "ЕКР" -> updateAchievement(textLetters)
+                "ККР" -> updateAchievement(textLetters)
+                "ЕРЕ" -> updateAchievement(textLetters)
+                "АММ" -> updateAchievement(textLetters)
+                "ВММ" -> updateAchievement(textLetters)
+                "СММ" -> updateAchievement(textLetters)
+                "ЕММ" -> updateAchievement(textLetters)
+                "НММ" -> updateAchievement(textLetters)
+                "КММ" -> updateAchievement(textLetters)
+                "ОММ" -> updateAchievement(textLetters)
+                "РММ" -> updateAchievement(textLetters)
+                "ТММ" -> updateAchievement(textLetters)
+                "УММ" -> updateAchievement(textLetters)
+                "ХММ" -> updateAchievement(textLetters)
+                "КМР" -> updateAchievement(textLetters)
+                "РМР" -> updateAchievement(textLetters)
+                "ММР" -> updateAchievement(textLetters)
+                "ТМР" -> updateAchievement(textLetters)
+                "НАА" -> updateAchievement(textLetters)
+                "ТАА" -> updateAchievement(textLetters)
+                "САА" -> updateAchievement(textLetters)
+                "ХАА" -> updateAchievement(textLetters)
+                "СКО" -> updateAchievement(textLetters)
+                "АСК" -> updateAchievement(textLetters)
+                "АНО" -> updateAchievement(textLetters)
+                "МОР" -> updateAchievement(textLetters)
+                "НСО" -> updateAchievement(textLetters)
+                "МРО" -> updateAchievement(textLetters)
+                "ООМ" -> updateAchievement(textLetters)
+                "МВУ" -> updateAchievement(textLetters)
+                "УВУ" -> updateAchievement(textLetters)
+                "УВО" -> updateAchievement(textLetters)
+                "ВМР" -> updateAchievement(textLetters)
+                "ККХ" -> updateAchievement(textLetters)
+                "ОМР" -> updateAchievement(textLetters)
+                "УМР" -> updateAchievement(textLetters)
+                "АУЕ" -> updateAchievement(textLetters)
+            }
+        }, 0)
     }
 
     private fun randomizeLetter(): String {
@@ -155,14 +145,13 @@ class RandomFragment : Fragment() {
     private fun randomizeNumber(): Int = Random().nextInt(8)
 
     private fun updateAchievement(achievement: String) {
-        val preferences = Preferences(requireContext())
+        val reference =
+            FirebaseHelper("${Preferences(requireContext()).getAccount()}/achievements/$achievement")
         viewToast(requireContext(), "Новое достижение за комбинацию: $achievement")
-        try{
-            Database("${Preferences(requireContext()).getAccount()}/achievements/$achievement")
-                .setValue(preferences.get(achievement).toInt())
-        }catch (_: NumberFormatException) {
-            Database("${Preferences(requireContext()).getAccount()}/achievements/$achievement")
-                .setValue(1)
+        try {
+            reference.setValue(preferences.get(achievement).toInt())
+        } catch (_: NumberFormatException) {
+            reference.setValue(1)
         }
     }
 }

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import ru.arturprgr.mylicenceplate.R
-import ru.arturprgr.mylicenceplate.data.Database
+import ru.arturprgr.mylicenceplate.data.FirebaseHelper
 import ru.arturprgr.mylicenceplate.databinding.FragmentRegisterBinding
 import ru.arturprgr.mylicenceplate.viewToast
 
@@ -35,11 +35,11 @@ class RegisterFragment : Fragment() {
                         Firebase.auth.createUserWithEmailAndPassword(email, password)
                             .addOnSuccessListener {
                                 val editedEmail = email.replace(".", "")
-                                Database("$editedEmail/name").setValue(name)
-                                Database("$editedEmail/browser/bookmarks/quantity").setValue(0)
-                                Database("$editedEmail/browser/history/quantity").setValue(0)
-                                Database("$editedEmail/browser/downloads/quantity").setValue(0)
-                                Database("$editedEmail/goals/goals/quantity").setValue(0)
+                                FirebaseHelper("$editedEmail/name").setValue(name)
+                                FirebaseHelper("$editedEmail/browser/bookmarks/quantity").setValue(0)
+                                FirebaseHelper("$editedEmail/browser/history/quantity").setValue(0)
+                                FirebaseHelper("$editedEmail/browser/downloads/quantity").setValue(0)
+                                FirebaseHelper("$editedEmail/goals/goals/quantity").setValue(0)
                                 findNavController().navigate(R.id.action_registerFragment_to_entranceFragment)
                             }
                             .addOnFailureListener {

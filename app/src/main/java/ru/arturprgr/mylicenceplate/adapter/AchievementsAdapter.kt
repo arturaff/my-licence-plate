@@ -10,7 +10,7 @@ import ru.arturprgr.mylicenceplate.databinding.LayoutAchievementBinding
 import ru.arturprgr.mylicenceplate.model.Achievement
 
 class AchievementsAdapter : RecyclerView.Adapter<AchievementsAdapter.ViewHolder>() {
-    private val adapter = arrayListOf<Achievement>()
+    private val achievementArrayList = arrayListOf<Achievement>()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
@@ -25,13 +25,20 @@ class AchievementsAdapter : RecyclerView.Adapter<AchievementsAdapter.ViewHolder>
         LayoutInflater.from(parent.context).inflate(R.layout.layout_achievement, parent, false)
     )
 
-    override fun getItemCount(): Int = adapter.size
+    override fun getItemCount(): Int = achievementArrayList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(adapter[position])
+        holder.bind(achievementArrayList[position])
 
     fun addAchievement(achievement: Achievement) {
-        adapter.add(achievement)
-        notifyItemChanged(achievement.position)
+        achievementArrayList.add(achievement)
+        notifyItemInserted(achievement.position)
+        notifyItemRangeInserted(achievement.position, achievementArrayList.size)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun editAchievement(index: Int, achievement: Achievement) {
+        achievementArrayList[index] = achievement
+        notifyDataSetChanged()
     }
 }
