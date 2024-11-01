@@ -2,12 +2,11 @@ package ru.arturprgr.mylicenceplate.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.auth.internal.RecaptchaActivity
 import ru.arturprgr.mylicenceplate.R
 import ru.arturprgr.mylicenceplate.adapter.MyFragmentPagerAdapter
 import ru.arturprgr.mylicenceplate.databinding.ActivityMainBinding
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         fragmentPagerAdapter.addFragment(AchievementsFragment())
         setContentView(binding.root)
 
-        if (Firebase.auth.currentUser != null) else startActivity(
+        if (Firebase.auth.currentUser == null) startActivity(
             Intent(this@MainActivity, AuthActivity::class.java)
         )
 

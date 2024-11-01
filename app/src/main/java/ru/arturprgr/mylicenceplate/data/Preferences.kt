@@ -1,16 +1,16 @@
 package ru.arturprgr.mylicenceplate.data
 
 import android.content.Context
+import ru.arturprgr.mylicenceplate.model.Achievement
 
 class Preferences(context: Context) {
     private val sPrefs = context.getSharedPreferences("sPrefs", Context.MODE_PRIVATE)
 
-    fun set(path: String, value: String) =
-        sPrefs.edit().putString(path, value).apply()
+    fun setAchievement(achievement: String, quantity: Int) = sPrefs.edit().putInt(achievement, quantity).apply()
 
-    fun get(path: String): String = sPrefs.getString(path, "").toString()
+    fun getAchievement(achievement: String) = sPrefs.getInt(achievement, 0)
 
-    fun setAccount(value: String) = set("account", value)
+    fun setAccount(value: String) = sPrefs.edit().putString("account", value).apply()
 
-    fun getAccount(): String = get("account")
+    fun getAccount(): String = "${sPrefs.getString("account", "")}"
 }

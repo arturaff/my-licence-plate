@@ -15,7 +15,7 @@ class AchievementsAdapter : RecyclerView.Adapter<AchievementsAdapter.ViewHolder>
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
         fun bind(achievement: Achievement) = with(LayoutAchievementBinding.bind(itemView)) {
-            textName.text = "Выбить ${achievement.name}"
+            textName.text = "Выбить ${achievement.type} ${achievement.name}"
             textQuantity.text = "Количество: ${achievement.quantity}"
             imageReward.setImageResource(achievement.drawable)
         }

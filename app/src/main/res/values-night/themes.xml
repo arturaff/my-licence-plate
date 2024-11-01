@@ -6,6 +6,6 @@
 
         <item name="colorPrimary">@color/main1</item>
         <item name="android:textStyle">bold</item>
-        <item name="fontFamily">@font/inter_bold</item>
+        <item name="fontFamily">@font/roboto_bold</item>
     </style>
 </resources>

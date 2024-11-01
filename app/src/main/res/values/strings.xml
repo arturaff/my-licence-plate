@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Мой номерной знак</string>
     <string name="auth">Авторизация</string>
     <string name="sign_in">Войдите в свой аккаунт</string>
@@ -15,5 +15,12 @@
     <string name="achievements">Достижения</string>
     <string name="random">Рандом</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="all">Всего достижений: 92 шт.</string>
+    <string name="all">Всего достижений: 176 шт.</string>
+    <string name="what_are_the_achievements">Какие бывают достижения?</string>
+    <string name="achievements_info" tools:ignore="TypographyEllipsis">В игре есть 6 видов достижений:\n1) Одинаковые цифры. Можно получить, если выбить одинаковые цифры (111, 222, 333... 999)\n\n2) Первые десять в цифрах. Можно получить, если выбить цифры, в которых первая и вторая цифра - 0 (001, 002, 003... 009)\n\n3) Ровные цифры. Можно получить, если выбить цифры, в которых вторая и последняя цифра - 0 (100, 200, 300... 900)\n\n4) Одинаковые буквы. Можно получить, если выбить одинаковые буквы (ААА, ВВВ, ЕЕЕ... УУУ)\n\n5) Комбинация. Можно получить, если выбить буквы из блатной серии (ААС, АСК, АКР...)\n\n6) Слово. Большинство из них не имеет блата. Можно выбить если в буквах слово (ЕКХ, АУЕ, ЕРЕ...)</string>
+    <string name="understand">Понятно</string>
+    <string name="problem_or">Проблема или предложение</string>
+    <string name="force_feedback">Обратная связь</string>
+    <string name="feedback_info">Если вы нашли ошибки, или что-то нужно улучшить, или вы хотите предложить добавить к достижениям что-то еще, или наоборот, удалить их, или сообщить, что есть еще комбинации, то напишите, пожалуйста, об этом ниже.</string>
+    <string name="send">Отправить</string>
 </resources>
